@@ -1,0 +1,29 @@
+button.btn.btn-danger.btn-sm.update-quantity {
+    background-color: #243251;
+    border: solid #243251;
+    border-radius: 20% 0% 0% 20%;
+    width: 100%;
+    cursor: pointer;
+}
+button.btn.btn-success.btn-sm.update-quantity {
+    background-color: #243251;
+    border: solid #243251;
+    border-radius: 0% 20% 20% 0%;
+    width: 100%;
+    cursor: pointer;
+}
+.numeric-input {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    border: 2px solid #243251;
+    border-radius: 40px;
+    margin: 0 auto;
+    justify-content: center;
+    
+}
+.numeric-input span {
+    margin-left: 10px;
+    margin-right: 10px;
+}
