@@ -1,14 +1,13 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProductoController;
 use App\Models\Producto;
 
-// Ruta de inicio
+// Redirigir a login en lugar de mostrar 'welcome'
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login'); // Redirige a la ruta de login
 });
 
 // Rutas de autenticación
@@ -45,5 +44,3 @@ Route::middleware(['auth'])->group(function () {
 
 // Ruta para eliminar producto
 Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
-
-

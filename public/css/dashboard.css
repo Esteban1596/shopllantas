@@ -2,15 +2,25 @@ button.btn.btn-danger.btn-sm.update-quantity {
     background-color: #243251;
     border: solid #243251;
     border-radius: 20% 0% 0% 20%;
-    width: 100%;
+    width: 50%;
     cursor: pointer;
 }
 button.btn.btn-success.btn-sm.update-quantity {
     background-color: #243251;
     border: solid #243251;
     border-radius: 0% 20% 20% 0%;
-    width: 100%;
+    width: 50%;
     cursor: pointer;
+}
+td .update-quantity {
+    display: inline-flex
+;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 2px;
+    margin: 0 5px;
 }
 .numeric-input {
     display: flex;
@@ -26,4 +36,8 @@ button.btn.btn-success.btn-sm.update-quantity {
 .numeric-input span {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.container.mt-4.option-table {
+    border-bottom: solid #c4c4c4;
 }
