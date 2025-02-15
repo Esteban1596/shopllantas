@@ -153,6 +153,10 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" id="guardarCotizacion">Guardar Cotización</button>
+                    <button class="btn btn-success" id="enviarCotizacion">Enviar Cotización</button>
+               </div>
             </div>
         </div>
     </div>

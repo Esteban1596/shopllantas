@@ -1,33 +1,25 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Cliente extends Model
 {
-    //
     use HasFactory;
 
-    protected $fillable = ['user_id', 'nombre', 'email', 'telefono'];
+    protected $fillable = [
+        'nombre', 'telefono', 'celular', 'email', 'nombre_comercial', 'direccion', 'website'
+    ];
 
-    // Relación inversa de muchos a uno con User
-    public function user()
+    public function productos()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(Producto::class); // Un cliente puede tener muchos productos
     }
 
-    // Relación uno a muchos con Cotizaciones
     public function cotizaciones()
     {
-        return $this->hasMany(Cotizacion::class);
+        return $this->hasMany(Cotizacion::class); // Un cliente puede tener muchas cotizaciones
     }
-
-    // Relación uno a muchos con Pedidos
-    public function pedidos()
-    {
-        return $this->hasMany(Pedido::class);
-    }
-
 }

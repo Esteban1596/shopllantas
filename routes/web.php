@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProductoController;
 use App\Models\Producto;
+use App\Http\Controllers\ClienteController;
 
 // Redirigir a login en lugar de mostrar 'welcome'
 Route::get('/', function () {
@@ -44,3 +45,10 @@ Route::middleware(['auth'])->group(function () {
 
 // Ruta para eliminar producto
 Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
+
+Route::get('registro-cliente', [ClienteController::class, 'create'])->name('clientes.create');
+Route::post('registro-cliente', [ClienteController::class, 'store'])->name('clientes.store');
+
+
+
+
