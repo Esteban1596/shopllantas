@@ -14,7 +14,8 @@ class ProductoController extends Controller
     public function index()
     {
         //
-        return view('productos');
+        $productos = Producto::all();
+        return view('productos.index', compact('productos'));
     }
 
     /**
@@ -22,7 +23,7 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        //
+        return view('create-productos');
     }
 
     /**
@@ -30,22 +31,16 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nombre' => 'required',
             'codigo' => 'required|unique:productos',
             'precio' => 'required|numeric',
             'existencia' => 'required|integer|min:0',
         ]);
     
-        // Crear el producto
-        $producto = Producto::create([
-            'nombre' => $request->nombre,
-            'codigo' => $request->codigo,
-            'precio' => $request->precio,
-            'existencia' => $request->existencia,
-        ]);
-
-        return redirect()->route('productos.index')->with('success', 'Producto agregado correctamente.');
+        Producto::create($validated);
+         
+        return redirect()->route('productos.create')->with('success', 'producto registrado exitosamente');
     }
 
     /**

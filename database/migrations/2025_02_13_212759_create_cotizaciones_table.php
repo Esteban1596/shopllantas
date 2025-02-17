@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('codigo_pedido', 6)->unique();
             $table->string("nombre");
+            $table->unsignedBigInteger('cliente_id'); 
             $table->integer('productos');
             $table->date('fecha');
             $table->decimal('total', 15, 2);

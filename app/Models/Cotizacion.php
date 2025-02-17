@@ -9,18 +9,19 @@ class Cotizacion extends Model
 {
     use HasFactory;
 
+    protected $table = 'cotizaciones';
+
     protected $fillable = [
-        'codigo_pedido', 'nombre', 'productos', 'fecha', 'total', 'cliente_id'
+        'codigo_pedido',
+        'nombre',
+        'cliente_id',
+        'productos',
+        'fecha',
+        'total'
     ];
 
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class); // Cada cotización pertenece a un cliente
-    }
-
-    public function productos()
-    {
-        return $this->belongsToMany(Producto::class, 'cotizaciones_productos', 'cotizacion_id', 'producto_id');
-        // Una cotización puede tener muchos productos, a través de la tabla intermedia cotizaciones_productos
+        return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 }

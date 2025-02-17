@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProductoController;
 use App\Models\Producto;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CotizacionController;
+use App\Http\Controllers\DashboardController;
+use App\Models\Cliente;
 
 // Redirigir a login en lugar de mostrar 'welcome'
 Route::get('/', function () {
@@ -22,10 +25,7 @@ Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
 // Ruta de dashboard protegida por autenticación
-Route::middleware(['auth'])->get('/dashboard', function () {
-    $productos = Producto::with('inventarios')->get(); // Cargar productos con su inventario
-    return view('dashboard', compact('productos'));
-})->name('dashboard');
+Route::middleware(['auth'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Ruta de logout
 Route::post('logout', function () {
@@ -33,22 +33,15 @@ Route::post('logout', function () {
     return redirect('/');  // Redirige al inicio o a la ruta que prefieras
 })->name('logout');
 
-// Rutas de productos
+// Rutas de productos y clientes, protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
-    Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
-    Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
+    Route::get('registro-producto', [ProductoController::class, 'create'])->name('productos.create');
+    Route::post('registro-producto', [ProductoController::class, 'store'])->name('productos.store');
     
-    // Rutas para incrementar y decrementar la cantidad
-    Route::post('/productos/{id}/cantidad/increase', [ProductoController::class, 'increaseQuantity']);
-    Route::post('/productos/{id}/cantidad/decrease', [ProductoController::class, 'decreaseQuantity']);
+    Route::get('registro-cliente', [ClienteController::class, 'create'])->name('clientes.create');
+    Route::post('registro-cliente', [ClienteController::class, 'store'])->name('clientes.store');
+
+    Route::resource('cotizaciones', CotizacionController::class);
+
 });
-
-// Ruta para eliminar producto
-Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
-
-Route::get('registro-cliente', [ClienteController::class, 'create'])->name('clientes.create');
-Route::post('registro-cliente', [ClienteController::class, 'store'])->name('clientes.store');
-
-
-
 

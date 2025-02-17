@@ -2,59 +2,76 @@
 
 @section('content')
 <div class="container">
-<div class="container mt-4 option-table">
-            <div class="row">
-                <!-- Botón Dashboard -->
-                <div class="col-3">
-                    <button class="btn btn-dashboard">
-                         Dashboard
-                    </button>
-                </div>
+    <!-- Alerta de éxito (se muestra si hay un mensaje de éxito en la sesión) -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-                <!-- Botón Analíticas -->
-                <div class="col-3">
-                    <button class="btn btn-analiticas">
-                        Analíticas
-                    </button>
-                </div>
 
-                <!-- Botón CxC -->
-                <div class="col-3">
-                    <button class="btn btn-cxc">
-                        CxC
-                    </button>
-                </div>
+    <!-- Alerta de error (se muestra si hay un mensaje de error en la sesión) -->
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
-                <!-- Botón CxP -->
-                <div class="col-3">
-                    <button class="btn btn-cxp">
-                        CxP
-                    </button>
-                </div>
+    <!-- Botones del Dashboard -->
+    <div class="container mt-4 option-table">
+        <div class="row">
+            <!-- Botón Dashboard -->
+            <div class="col-3">
+                <button class="btn btn-dashboard">
+                    Dashboard
+                </button>
+            </div>
+
+            <!-- Botón Analíticas -->
+            <div class="col-3">
+                <button class="btn btn-analiticas">
+                    Analíticas
+                </button>
+            </div>
+
+            <!-- Botón CxC -->
+            <div class="col-3">
+                <button class="btn btn-cxc">
+                    CxC
+                </button>
+            </div>
+
+            <!-- Botón CxP -->
+            <div class="col-3">
+                <button class="btn btn-cxp">
+                    CxP
+                </button>
             </div>
         </div>
-        
-        <div class="container mt-4 option-view">
-            <div class="row">
-                <div class="col-3">
-                    <button class="btn btn-productos">
-                         Productos
-                    </button>
-                </div>
-                <div class="col-3">
-                    <button class="btn btn-clientes">
-                        Clientes
-                    </button>
-                </div>
+    </div>
+
+    <!-- Botones de opciones -->
+    <div class="container mt-4 option-view">
+        <div class="row">
+            <div class="col-3">
+                <button class="btn btn-productos">
+                    Productos
+                </button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-clientes">
+                    Clientes
+                </button>
             </div>
         </div>
-   
+    </div>
+
     <!-- Campo de búsqueda -->
     <div class="mb-3">
         <input type="text" id="search" class="form-control" placeholder="Buscar producto por código o nombre...">
     </div>
 
-    <!-- Tabla de búsqueda de productos -->
+    <!-- Tabla de productos -->
     <div class="table-responsive" id="productos-table-container" style="display: none;">
         <table class="table table-hover" id="productos-table">
             <thead>
@@ -91,6 +108,7 @@
 
     <hr>
 
+    <!-- Productos seleccionados y cotizador -->
     <div class="container mt-4">
         <div class="row">
             <!-- Columna de productos seleccionados -->
@@ -154,15 +172,59 @@
                     </table>
                 </div>
                 <div class="d-grid gap-2">
-                    <button class="btn btn-primary" id="guardarCotizacion">Guardar Cotización</button>
+                    <button type="button" id="guardarCotizacionBtn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalGuardarCotizacion">Guardar Cotización</button>
                     <button class="btn btn-success" id="enviarCotizacion">Enviar Cotización</button>
-               </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal para Guardar Cotización -->
+<div class="modal fade" id="modalGuardarCotizacion" tabindex="-1" aria-labelledby="modalGuardarCotizacionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalGuardarCotizacionLabel">Guardar Cotización</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('cotizaciones.store') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="codigo_pedido">Código de Cotización</label>
+                        <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" maxlength="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre">Nombre de la Cotización</label>
+                        <input type="text" class="form-control" name="nombre" id="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cliente_id">Cliente</label>
+                        <select name="cliente_id" id="cliente_id" class="form-control" required>
+                            @foreach($clientes as $cliente)
+                                <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productos">Número de Productos</label>
+                        <input type="number" class="form-control" name="productos" id="productos" value="0" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="total">Total</label>
+                        <input type="number" class="form-control" name="total" id="total-modal" value="0.00" required readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar Cotización</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
 <script src="{{ asset('js/dashboard.js') }}"></script>
+<script src="{{ asset('js/modal_save_product.js') }}"></script>
 @endpush
