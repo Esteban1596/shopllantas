@@ -43,7 +43,7 @@
                         <td>
                             <div class="btn-group" role="group">
                                 <!--<a href="{{ route('cotizaciones.show', $cotizacion->id) }}" class="btn btn-info">Ver</a>-->
-                                <a href="{{ route('cotizaciones.edit', $cotizacion->id) }}" class="btn btn-warning">Editar</a>
+                                <a href="{{ route('cotizaciones.show', $cotizacion->id) }}" class="btn btn-info">Ver</a>
                                 <form action="{{ route('cotizaciones.destroy', $cotizacion->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de eliminar esta cotización?');">
                                     @csrf
                                     @method('DELETE')

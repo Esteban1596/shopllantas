@@ -22,4 +22,12 @@ class Producto extends Model
     {
         return $this->hasMany(Inventario::class); // Un producto puede tener muchos registros en inventario
     }
+
+    public function cotizaciones()
+    {
+        return $this->belongsToMany(Cotizacion::class, 'cotizacion_producto', 'producto_id', 'cotizacion_id')
+                    ->withPivot('cantidad', 'precio_unitario');
+    }
+    
+
 }

@@ -42,6 +42,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('registro-cliente', [ClienteController::class, 'store'])->name('clientes.store');
 
     Route::resource('cotizaciones', CotizacionController::class);
+    Route::get('/cotizaciones/{id}', [CotizacionController::class, 'show'])->name('cotizaciones.show');
+    Route::delete('/cotizaciones/{id}', [CotizacionController::class, 'destroy'])->name('cotizaciones.destroy');
+
 
 });
 

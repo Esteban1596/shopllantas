@@ -24,4 +24,9 @@ class Cotizacion extends Model
     {
         return $this->belongsTo(Cliente::class, 'cliente_id');
     }
+    public function productosRelacionados() // Cambia el nombre para evitar conflictos
+{
+    return $this->belongsToMany(Producto::class, 'cotizacion_producto')
+                ->withPivot('cantidad', 'precio_unitario');
+}
 }

@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const ivaElement = document.getElementById("iva");
     const totalElement = document.getElementById("total");
 
+    // Objeto para almacenar la existencia inicial de cada producto
+    let existenciaInicial = {};
+
     // Función para filtrar productos en tiempo real
     searchInput.addEventListener("keyup", function () {
         let searchText = this.value.trim().toLowerCase();
@@ -42,17 +45,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            // Guardar la existencia inicial del producto
+            existenciaInicial[productId] = existencia;
+
+            // Reducir la existencia en 1
+            if (existencia > 0) {
+                existencia -= 1;
+                existenciaInicial[productId] = existencia; // Actualizamos la existencia inicial
+            }
+
             let newRow = document.createElement("tr");
             newRow.id = `producto-${productId}`;
             newRow.innerHTML = `
+            <td>${productId}</td>
                 <td>${codigo}</td>
                 <td>${nombre}</td>
                 <td>$<span class="precio">${precio.toFixed(2)}</span></td>
-                <td>${existencia}</td>
+                <td class="existencia">${existencia}</td>
                 <td style="display:flex;">
-                    <button class="btn btn-danger btn-sm update-quantity" data-action="decrease">-</button>
+                    <button class="btn btn-danger btn-sm update-quantity" data-action="decrease" data-id="${productId}">-</button>
                     <span class="cantidad">1</span>
-                    <button class="btn btn-success btn-sm update-quantity" data-action="increase">+</button>
+                    <button class="btn btn-success btn-sm update-quantity" data-action="increase" data-id="${productId}">+</button>
                 </td>
                 <td>$<span class="total">${precio.toFixed(2)}</span></td>
                 <td>
@@ -61,31 +74,52 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
             productosSeleccionados.appendChild(newRow);
 
+            // Actualizar la tabla con la nueva existencia
             actualizarCotizacion();
         });
     });
 
-    // Manejo de incremento, decremento y eliminación de productos
+    // Manejo de incremento y decremento de productos
     productosSeleccionados.addEventListener("click", function (e) {
         let row = e.target.closest("tr");
 
         if (e.target.classList.contains("update-quantity")) {
+            let productId = e.target.getAttribute("data-id");
             let cantidadElement = row.querySelector(".cantidad");
             let totalElement = row.querySelector(".total");
-            let existencia = parseInt(row.cells[3].textContent) || 0;
+            let existenciaElement = row.querySelector(".existencia");
             let precio = parseFloat(row.querySelector(".precio").textContent);
             let cantidad = parseInt(cantidadElement.textContent);
+            let existenciaActual = parseInt(existenciaElement.textContent);
+            let existenciaMax = existenciaInicial[productId]; // Existencia original
             let action = e.target.getAttribute("data-action");
 
-            if (action === "increase" && cantidad < existencia) cantidad++;
-            else if (action === "decrease" && cantidad > 1) cantidad--;
+            if (action === "increase" && existenciaActual > 0) {
+                cantidad++;
+                existenciaActual--;
+                existenciaInicial[productId]--; // Restar de la existencia original
+            } else if (action === "decrease" && cantidad > 1) {
+                cantidad--;
+                existenciaActual++;
+                existenciaInicial[productId]++; // Restaurar de la existencia original
+            }
 
             cantidadElement.textContent = cantidad;
+            existenciaElement.textContent = existenciaActual;
             totalElement.textContent = (cantidad * precio).toFixed(2);
             actualizarCotizacion();
         }
 
+        // Eliminación de productos
         if (e.target.classList.contains("eliminar-producto")) {
+            let productId = e.target.getAttribute("data-id");
+            let cantidad = parseInt(row.querySelector(".cantidad").textContent);
+            let existenciaElement = row.querySelector(".existencia");
+
+            // Restaurar la existencia al eliminar
+            existenciaInicial[productId] += cantidad; // Restaurar la existencia original
+            existenciaElement.textContent = existenciaInicial[productId];
+
             row.remove();
             actualizarCotizacion();
         }
@@ -95,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function actualizarCotizacion() {
         let subtotalSeleccionados = 0;
         let numProductos = 0;
-    
+
         // Recorrer la tabla de productos seleccionados
         document.querySelectorAll("#productos-seleccionados tbody tr").forEach(row => {
             let cantidad = parseInt(row.querySelector(".cantidad").textContent);
@@ -103,24 +137,22 @@ document.addEventListener("DOMContentLoaded", function () {
             subtotalSeleccionados += total;
             numProductos += cantidad;
         });
-    
+
         let iva = subtotalSeleccionados * 0.16;
         let totalCotizador = subtotalSeleccionados + iva;
-    
+
         // Obtener los elementos de los subtotales
         const subtotalElement = document.getElementById("subtotal");
         const subtotalCotizadorElement = document.getElementById("subtotal-cotizador");
         const ivaElement = document.getElementById("iva");
         const totalElement = document.getElementById("total");
         const numProductosElement = document.getElementById("num-productos");
-        
+
         // Actualizar valores en la tabla
         numProductosElement.textContent = numProductos;
         subtotalElement.textContent = `$${subtotalSeleccionados.toFixed(2)}`;
         subtotalCotizadorElement.textContent = `$${subtotalSeleccionados.toFixed(2)}`;
         ivaElement.textContent = `$${iva.toFixed(2)}`;
         totalElement.textContent = `$${totalCotizador.toFixed(2)}`;
-    
     }
-    
 });

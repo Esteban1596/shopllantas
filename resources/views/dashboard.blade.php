@@ -118,6 +118,7 @@
                     <table class="table table-hover" id="productos-seleccionados">
                         <thead>
                             <tr>
+                                <th>ID</ht>
                                 <th>Código</th>
                                 <th>Nombre</th>
                                 <th>Precio</th>
@@ -189,34 +190,40 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('cotizaciones.store') }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="codigo_pedido">Código de Cotización</label>
-                        <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" maxlength="6" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="nombre">Nombre de la Cotización</label>
-                        <input type="text" class="form-control" name="nombre" id="nombre" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="cliente_id">Cliente</label>
-                        <select name="cliente_id" id="cliente_id" class="form-control" required>
-                            @foreach($clientes as $cliente)
-                                <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="productos">Número de Productos</label>
-                        <input type="number" class="form-control" name="productos" id="productos" value="0" required readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="total">Total</label>
-                        <input type="number" class="form-control" name="total" id="total-modal" value="0.00" required readonly>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Guardar Cotización</button>
-                </form>
+            <form action="{{ route('cotizaciones.store') }}" method="POST">
+    @csrf
+    <div class="form-group">
+        <label for="codigo_pedido">Código de Cotización</label>
+        <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" maxlength="6" required>
+    </div>
+    <div class="form-group">
+        <label for="nombre">Nombre de la Cotización</label>
+        <input type="text" class="form-control" name="nombre" id="nombre" required>
+    </div>
+    <div class="form-group">
+        <label for="cliente_id">Cliente</label>
+        <select name="cliente_id" id="cliente_id" class="form-control" required>
+            @foreach($clientes as $cliente)
+                <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="productos">Número de Productos</label>
+        <input type="number" class="form-control" name="productos" id="productos" value="0" required readonly>
+    </div>
+    <div class="form-group">
+        <label for="total">Total</label>
+        <input type="number" class="form-control" name="total" id="total-modal" value="0.00" required readonly>
+    </div>
+
+    <!-- Lista de Productos Seleccionados -->
+    <div id="productosSeleccionados"></div>
+    <input type="hidden" name="productos_json" id="productos_json">
+
+    <button type="submit" class="btn btn-primary">Guardar Cotización</button>
+</form>
+
             </div>
         </div>
     </div>
