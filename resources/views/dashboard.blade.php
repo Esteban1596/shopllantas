@@ -50,21 +50,17 @@
         </div>
     </div>
 
-    <!-- Botones de opciones -->
-    <div class="container mt-4 option-view">
-        <div class="row">
-            <div class="col-3">
-                <button class="btn btn-productos">
-                    Productos
-                </button>
-            </div>
-            <div class="col-3">
-                <button class="btn btn-clientes">
-                    Clientes
-                </button>
-            </div>
+   <!-- Botones de opciones -->
+<div class="container mt-4 option-view">
+    <div class="row">
+        <div class="col-3">
+            <a href="{{ route('productos.index') }}" class="btn btn-primary">Productos</a>
+        </div>
+        <div class="col-3">
+            <a href="{{ route('clientes.index') }}" class="btn btn-success">Clientes</a>
         </div>
     </div>
+</div>
 
     <!-- Campo de búsqueda -->
     <div class="mb-3">
@@ -109,7 +105,7 @@
     <hr>
 
     <!-- Productos seleccionados y cotizador -->
-    <div class="container mt-4">
+    <div class="container mt-4" style="margin-bottom: 8%;">
         <div class="row">
             <!-- Columna de productos seleccionados -->
             <div class="col-md-9">
@@ -174,7 +170,6 @@
                 </div>
                 <div class="d-grid gap-2">
                     <button type="button" id="guardarCotizacionBtn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalGuardarCotizacion">Guardar Cotización</button>
-                    <button class="btn btn-success" id="enviarCotizacion">Enviar Cotización</button>
                 </div>
             </div>
         </div>
@@ -218,10 +213,10 @@
     </div>
 
     <!-- Lista de Productos Seleccionados -->
-    <div id="productosSeleccionados"></div>
+    <div id="productosSeleccionados" style="display: none;"></div>
     <input type="hidden" name="productos_json" id="productos_json">
 
-    <button type="submit" class="btn btn-primary">Guardar Cotización</button>
+    <button type="submit" class="btn btn-primary" style="margin-top: 17px;">Guardar Cotización</button>
 </form>
 
             </div>

@@ -15,11 +15,11 @@ class Cliente extends Model
 
     public function productos()
     {
-        return $this->hasMany(Producto::class); // Un cliente puede tener muchos productos
+        return $this->hasMany(Producto::class);
     }
 
     public function cotizaciones()
     {
-        return $this->hasMany(Cotizacion::class); // Un cliente puede tener muchas cotizaciones
+        return $this->hasMany(Cotizacion::class);
     }
 }

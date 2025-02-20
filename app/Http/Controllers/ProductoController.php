@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Inventario;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use App\Models\Cotizacion;
 
 class ProductoController extends Controller
 {
@@ -23,7 +24,7 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        return view('create-productos');
+        return view('productos.create-productos');
     }
 
     /**
@@ -72,13 +73,24 @@ class ProductoController extends Controller
      */
     public function destroy($id)
     {
-        $producto = Producto::find($id);
+        $producto = Producto::findOrFail($id);
 
-        if (!$producto) {
-            return response()->json(['error' => 'Producto no encontrado'], 404);
+        // Verificar si el producto está relacionado con alguna cotización
+        $isInCotizacion = Cotizacion::whereHas('productosRelacionados', function($query) use ($producto) {
+            $query->where('producto_id', $producto->id);
+        })->exists();
+
+        if ($isInCotizacion) {
+            // Si está en una cotización, no permitir la eliminación
+            return redirect()->route('productos.index')
+                ->with('error', 'No se puede eliminar el producto, ya está en una cotización.');
         }
-    
+
+        // Si no está en ninguna cotización, proceder con la eliminación
         $producto->delete();
-        return response()->json(['success' => 'Producto eliminado correctamente']);
+
+        return redirect()->route('productos.index')
+            ->with('success', 'Producto eliminado correctamente.');
     }
+
 }

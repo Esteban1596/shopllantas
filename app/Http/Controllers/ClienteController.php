@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use App\Models\Cotizacion;
 
 class ClienteController extends Controller
 {
@@ -17,7 +18,7 @@ class ClienteController extends Controller
 
     public function create()
     {
-        return view('create-clientes');
+        return view('clientes.create-clientes');
     }
 
    
@@ -68,13 +69,22 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')->with('success', 'Cliente actualizado exitosamente!');
     }
 
-    // Eliminar un cliente
     public function destroy($id)
     {
         $cliente = Cliente::findOrFail($id);
+    
+        $isInCotizacion = Cotizacion::where('cliente_id', $cliente->id)->exists();
+    
+        if ($isInCotizacion) {
+            return redirect()->route('clientes.index')
+                ->with('error', 'No se puede eliminar el cliente, ya tiene cotizaciones asociadas.');
+        }
+    
         $cliente->delete();
-
-
-        return redirect()->route('clientes.index')->with('success', 'Cliente eliminado exitosamente!');
+    
+        return redirect()->route('clientes.index')
+            ->with('success', 'Cliente eliminado correctamente.');
     }
+    
+
 }

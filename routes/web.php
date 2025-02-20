@@ -8,6 +8,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Cliente;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // Redirigir a login en lugar de mostrar 'welcome'
 Route::get('/', function () {
@@ -30,20 +31,27 @@ Route::middleware(['auth'])->get('/dashboard', [DashboardController::class, 'ind
 // Ruta de logout
 Route::post('logout', function () {
     Auth::logout();
-    return redirect('/');  // Redirige al inicio o a la ruta que prefieras
+    return redirect('/');  
 })->name('logout');
 
 // Rutas de productos y clientes, protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
+    Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
     Route::get('registro-producto', [ProductoController::class, 'create'])->name('productos.create');
     Route::post('registro-producto', [ProductoController::class, 'store'])->name('productos.store');
+    Route::delete('productos/{producto}', [ProductoController::class, 'destroy'])->name('productos.destroy');
     
+    Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
     Route::get('registro-cliente', [ClienteController::class, 'create'])->name('clientes.create');
     Route::post('registro-cliente', [ClienteController::class, 'store'])->name('clientes.store');
+    Route::delete('clientes/{cliente}', [ClienteController::class, 'destroy'])->name('clientes.destroy');
+
 
     Route::resource('cotizaciones', CotizacionController::class);
     Route::get('/cotizaciones/{id}', [CotizacionController::class, 'show'])->name('cotizaciones.show');
     Route::delete('/cotizaciones/{id}', [CotizacionController::class, 'destroy'])->name('cotizaciones.destroy');
+    
+    Route::get('cotizacion/{id}/descargar', [CotizacionController::class, 'descargarCotizacion'])->name('cotizaciones.descargar');
 
 
 });

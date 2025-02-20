@@ -6,13 +6,14 @@ use App\Models\CotizacionProducto;
 use Illuminate\Http\Request;
 use Carbon\Carbon; 
 use App\Models\Producto;
+use Barryvdh\DomPDF\Facade\Pdf; 
 
 class CotizacionController extends Controller
 {
     public function index()
     {
         // Obtener todas las cotizaciones
-        $cotizaciones = Cotizacion::all();
+        $cotizaciones = Cotizacion::orderBy('id', 'desc')->get();
 
         // Pasar las cotizaciones a la vista
         return view('cotizaciones.lista_cotizaciones', compact('cotizaciones'));
@@ -93,20 +94,32 @@ class CotizacionController extends Controller
         {
             $cotizacion = Cotizacion::findOrFail($id);
 
-            // Restaurar la cantidad de productos antes de eliminar
+            
             foreach ($cotizacion->productosRelacionados as $producto) {
                 $producto->existencia += $producto->pivot->cantidad;
                 $producto->save();
             }
 
-            // Eliminar los registros en la tabla intermedia
+           
             $cotizacion->productosRelacionados()->detach();
 
-            // Eliminar la cotización
+           
             $cotizacion->delete();
 
             return redirect()->route('cotizaciones.index')->with('success', 'Cotización eliminada correctamente.');
         }
+
+        public function descargarCotizacion($id)
+        {
+                $cotizacion = Cotizacion::with('productosRelacionados', 'cliente')->findOrFail($id);
+
+                
+                $pdf = PDF::loadView('cotizaciones.pdf', compact('cotizacion'));
+
+                
+                return $pdf->download('cotizacion_' . $cotizacion->codigo_pedido . '.pdf');
+        }
+
 
     
 }
