@@ -37,33 +37,35 @@
                 </tr>
             </thead>
             <tbody id="cotizaciones-tbody">
-                @foreach($cotizaciones as $cotizacion)
-                    <tr>
-                        <td>{{ $cotizacion->codigo_pedido }}</td>
-                        <td>{{ $cotizacion->nombre }}</td>
-                        <td>{{ $cotizacion->cliente->nombre }}</td>
-                        <td>{{ $cotizacion->productos }}</td>
-                        <td>{{ $cotizacion->fecha }}</td>
-                        <td>{{ $cotizacion->total }}</td>
-                        <td>
-                        <div class="btn-group" role="group">
-                            <a href="{{ route('cotizaciones.show', $cotizacion->id) }}" class="btn btn-info rounded-pill me-2">Ver</a>
-                            
-                            <!-- Ícono de usuario para abrir el modal -->
-                            <button type="button" class="btn btn-primary rounded-pill me-2" data-bs-toggle="modal" data-bs-target="#userModal{{ $cotizacion->id }}">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                            </button>
+    @foreach($cotizaciones as $cotizacion)
+        <tr id="cotizacion-{{ $cotizacion->id }}">
+            <td>{{ $cotizacion->codigo_pedido }}</td>
+            <td>{{ $cotizacion->nombre }}</td>
+            <td>{{ $cotizacion->cliente->nombre }}</td>
+            <td>{{ $cotizacion->productos }}</td>
+            <td>{{ $cotizacion->fecha }}</td>
+            <td>{{ $cotizacion->total }}</td>
+            <td>
+                <div class="btn-group" role="group">
+                    @if($cotizacion->status != 'vendida')
+                        <a href="{{ route('cotizaciones.show', $cotizacion->id) }}" class="btn btn-info rounded-pill me-2">Ver</a>
+                        <button type="button" class="btn btn-outline-success btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#ventaModal{{ $cotizacion->id }}">
+                            <i class="fas fa-check-circle"></i> Venta
+                        </button>
+                    @else
+                        <button class="btn btn-secondary" disabled>Venta</button>
+                    @endif
+                    <form action="{{ route('cotizaciones.destroy', $cotizacion->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de eliminar esta cotización?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger rounded-pill">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
 
-                            <form action="{{ route('cotizaciones.destroy', $cotizacion->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de eliminar esta cotización?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger rounded-pill">Eliminar</button>
-                            </form>
-                        </div>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
         </table>
     </div>
 </div>
@@ -91,6 +93,39 @@
 </div>
 @endforeach
 
+@foreach($cotizaciones as $cotizacion)
+<!-- Modal para confirmar la venta -->
+<div class="modal fade" id="ventaModal{{ $cotizacion->id }}" tabindex="-1" aria-labelledby="ventaModalLabel{{ $cotizacion->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="ventaModalLabel{{ $cotizacion->id }}">
+                    <i class="fas fa-check-circle"></i> Confirmar Venta
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('ventas.store') }}" method="POST" id="venta-form-{{ $cotizacion->id }}">
+                @csrf
+                <div class="modal-body">
+                    <p>¿Deseas registrar esta cotización como una venta?</p>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Código:</strong> {{ $cotizacion->codigo_pedido }}</li>
+                        <li class="list-group-item"><strong>Cliente:</strong> {{ $cotizacion->cliente->nombre }}</li>
+                        <li class="list-group-item"><strong>Total:</strong> ${{ number_format($cotizacion->total, 2) }}</li>
+                    </ul>
+                    <input type="hidden" name="cotizacion_id" value="{{ $cotizacion->id }}">
+                    <input type="hidden" name="cliente_id" value="{{ $cotizacion->cliente->id }}">
+                    <input type="hidden" name="total" value="{{ $cotizacion->total }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Registrar Venta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
 
 <!-- JavaScript para filtrar la tabla -->
 <script>
@@ -115,5 +150,17 @@
             }
         });
     });
+
+    function deleteCotizacionRow(cotizacionId) {
+        // Realiza el envío del formulario
+        var form = document.getElementById('venta-form-' + cotizacionId);
+        form.submit();  // Enviar el formulario para registrar la venta.
+
+        // Elimina la fila de la cotización de la tabla (visualmente)
+        var row = document.getElementById('cotizacion-' + cotizacionId);
+        if (row) {
+            row.remove();  // Eliminar la fila de la tabla
+        }
+    }
 </script>
 @endsection

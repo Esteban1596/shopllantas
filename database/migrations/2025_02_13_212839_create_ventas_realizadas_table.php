@@ -9,16 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
     public function up(): void
     {
         Schema::create('ventas_realizadas', function (Blueprint $table) {
             $table->id();
-    $table->foreignId('cotizacion_id')->constrained('cotizaciones')->onDelete('cascade');
-    $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
-    $table->date('fecha_venta');
-    $table->decimal('total', 15, 2);
-    $table->timestamps();
-        });
+            $table->foreignId('cotizacion_id')->constrained('cotizaciones')->onDelete('cascade');
+            $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
+            $table->date('fecha_venta');
+            $table->decimal('total', 15, 2);
+            $table->timestamps();
+                });
     }
 
     /**

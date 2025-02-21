@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('productos');
             $table->date('fecha');
             $table->decimal('total', 15, 2);
+            $table->string('status')->default('pendiente');
             $table->timestamps();
         });
     }

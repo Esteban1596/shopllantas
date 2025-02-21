@@ -18,52 +18,49 @@
     @endif
 
     <!-- Botones del Dashboard -->
-    <div class="container mt-4 option-table">
-        <div class="row">
-            <!-- Botón Dashboard -->
-            <div class="col-3">
-                <button class="btn btn-dashboard">
-                    Dashboard
-                </button>
-            </div>
+    <div class="container mt-4 mb-2 p-2 option-table">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <div class="row">
+                <!-- Botón Dashboard -->
+                <div class="col-3">
+                    <button class="btn btn-dashboard">
+                        Dashboard
+                    </button>
+                </div>
 
-            <!-- Botón Analíticas -->
-            <div class="col-3">
-                <button class="btn btn-analiticas">
-                    Analíticas
-                </button>
-            </div>
+                <!-- Botón Analíticas -->
+                <div class="col-3">
+                    <button class="btn btn-analiticas">
+                        Analíticas
+                    </button>
+                </div>
 
-            <!-- Botón CxC -->
-            <div class="col-3">
-                <button class="btn btn-cxc">
-                    CxC
-                </button>
-            </div>
+                <!-- Botón CxC -->
+                <div class="col-3">
+                    <button class="btn btn-cxc">
+                        CxC
+                    </button>
+                </div>
 
-            <!-- Botón CxP -->
-            <div class="col-3">
-                <button class="btn btn-cxp">
-                    CxP
-                </button>
+                <!-- Botón CxP -->
+                <div class="col-3">
+                    <button class="btn btn-cxp">
+                        CxP
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-   <!-- Botones de opciones -->
-<div class="container mt-4 option-view">
-    <div class="row">
-        <div class="col-3">
+    <div class="container mt-2 mb-2 p-2">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a href="{{ route('productos.index') }}" class="btn btn-primary">Productos</a>
-        </div>
-        <div class="col-3">
-            <a href="{{ route('clientes.index') }}" class="btn btn-success">Clientes</a>
+            <a href="{{ route('clientes.index') }}" class="btn btn-primary">Clientes</a>
+            <a href="{{ route('cotizaciones.index') }}" class="btn btn-primary">Cotizaciones</a>
         </div>
     </div>
-</div>
 
-    <!-- Campo de búsqueda -->
-    <div class="mb-3">
+    <div class="container mt-2 mb-2 p-2">
         <input type="text" id="search" class="form-control" placeholder="Buscar producto por código o nombre...">
     </div>
 

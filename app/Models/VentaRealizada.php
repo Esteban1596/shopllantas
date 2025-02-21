@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class VentaRealizada extends Model
 {
     use HasFactory;
-
+    protected $table = 'ventas_realizadas'; 
     protected $fillable = [
-        'cotizacion_id', 'producto_id', 'cantidad', 'total', 'fecha'
+        'cotizacion_id', 'cliente_id', 'fecha_venta', 'total'
     ];
 
     public function cotizacion()
@@ -21,5 +21,9 @@ class VentaRealizada extends Model
     public function producto()
     {
         return $this->belongsTo(Producto::class); // Una venta realizada tiene un producto
+    }
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class);
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Cliente;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\VentaController;
 
 // Redirigir a login en lugar de mostrar 'welcome'
 Route::get('/', function () {
@@ -48,11 +49,10 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::resource('cotizaciones', CotizacionController::class);
-    Route::get('/cotizaciones/{id}', [CotizacionController::class, 'show'])->name('cotizaciones.show');
-    Route::delete('/cotizaciones/{id}', [CotizacionController::class, 'destroy'])->name('cotizaciones.destroy');
-    
     Route::get('cotizacion/{id}/descargar', [CotizacionController::class, 'descargarCotizacion'])->name('cotizaciones.descargar');
-
+   
+    Route::get('ventas', [VentaController::class, 'index'])->name('ventas.index');
+    Route::post('ventas', [VentaController::class, 'store'])->name('ventas.store');
 
 });
 

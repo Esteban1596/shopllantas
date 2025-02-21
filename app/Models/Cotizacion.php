@@ -17,8 +17,10 @@ class Cotizacion extends Model
         'cliente_id',
         'productos',
         'fecha',
-        'total'
+        'total',
+        'status'
     ];
+
 
     public function cliente()
     {

@@ -14,6 +14,7 @@ class CotizacionController extends Controller
     {
         // Obtener todas las cotizaciones
         $cotizaciones = Cotizacion::orderBy('id', 'desc')->get();
+        $cotizaciones = Cotizacion::where('status', '!=', 'vendida')->get();
 
         // Pasar las cotizaciones a la vista
         return view('cotizaciones.lista_cotizaciones', compact('cotizaciones'));
