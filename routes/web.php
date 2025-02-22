@@ -21,10 +21,16 @@ Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('login.submit');
 Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('register', [AuthController::class, 'register'])->name('register.submit');
-Route::get('password/reset', [AuthController::class, 'showResetForm'])->name('password.request');
-Route::post('password/email', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset', [AuthController::class, 'showRequestForm'])->name('password.request');
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+// Enviar el correo de recuperación
+Route::post('password/email', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+
+// Restablecer la contraseña con el token
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
+
+
+
 
 // Ruta de dashboard protegida por autenticación
 Route::middleware(['auth'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -53,6 +59,8 @@ Route::middleware(['auth'])->group(function () {
    
     Route::get('ventas', [VentaController::class, 'index'])->name('ventas.index');
     Route::post('ventas', [VentaController::class, 'store'])->name('ventas.store');
+    Route::delete('ventas/{id}', [VentaController::class, 'destroy'])->name('ventas.destroy');
+
 
 });
 

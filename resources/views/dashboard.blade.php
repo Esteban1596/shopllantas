@@ -57,6 +57,7 @@
             <a href="{{ route('productos.index') }}" class="btn btn-primary">Productos</a>
             <a href="{{ route('clientes.index') }}" class="btn btn-primary">Clientes</a>
             <a href="{{ route('cotizaciones.index') }}" class="btn btn-primary">Cotizaciones</a>
+            <a href="{{ route('ventas.index') }}" class="btn btn-primary">Ventas</a>
         </div>
     </div>
 

@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -48,10 +49,10 @@ class User extends Authenticatable
      {
          return $this->hasMany(Cliente::class);
      }
- 
-     // Relación uno a muchos con Pedidos
-     public function pedidos()
-     {
-         return $this->hasMany(Pedido::class);
-     }
+
+     public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
 }

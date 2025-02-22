@@ -19,15 +19,25 @@
                     <th>Cliente</th>
                     <th>Fecha de Venta</th>
                     <th>Total</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($ventas as $venta)
                     <tr>
-                        <td>{{ $venta->cotizacion->codigo_pedido }}</td>  <!-- Mostrar código de cotización -->
-                        <td>{{ $venta->cliente->nombre }}</td>            <!-- Mostrar nombre del cliente -->
-                        <td>{{ $venta->fecha_venta }}</td>                <!-- Mostrar fecha de venta -->
-                        <td>{{ number_format($venta->total, 2) }}</td>     <!-- Mostrar el total de la venta -->
+                        <td>{{ $venta->cotizacion->codigo_pedido }}</td> 
+                        <td>{{ $venta->cliente->nombre }}</td>           
+                        <td>{{ $venta->fecha_venta }}</td>              
+                        <td>{{ number_format($venta->total, 2) }}</td> 
+                        <td>
+                            <form action="{{ route('ventas.destroy', $venta->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta venta?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
