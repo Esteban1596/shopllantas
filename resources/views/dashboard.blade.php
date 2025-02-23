@@ -2,18 +2,17 @@
 
 @section('content')
 <div class="container">
-    <!-- Alerta de éxito (se muestra si hay un mensaje de éxito en la sesión) -->
-    @if(session('success'))
-        <div class="alert alert-success">
+@if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
-
-    <!-- Alerta de error (se muestra si hay un mensaje de error en la sesión) -->
     @if(session('error'))
-        <div class="alert alert-danger">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
@@ -58,6 +57,11 @@
             <a href="{{ route('clientes.index') }}" class="btn btn-primary">Clientes</a>
             <a href="{{ route('cotizaciones.index') }}" class="btn btn-primary">Cotizaciones</a>
             <a href="{{ route('ventas.index') }}" class="btn btn-primary">Ventas</a>
+     
+            @if(auth()->check() && auth()->user()->isAdmin())  
+            <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Usuarios</a>
+        @endif
+           
         </div>
     </div>
 
