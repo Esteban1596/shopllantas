@@ -10,21 +10,21 @@ use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
-    // Mostrar el formulario de registro solo si el usuario ya está registrado
-        public function showRegisterForm()
+    // Mostrar el formulario de registro solo si el usuario es administrador
+    public function showRegisterForm()
     {
-        if (!Auth::check() || Auth::user()->role !== 'admin') {
+        if (!Auth::check() || (Auth::user() && Auth::user()->role !== 'admin')) {
             return redirect()->route('login')->with('error', 'No eres administrador, no puedes acceder a esta página.'); // Redirige a login si no es admin
         }
 
         return view('auth.register');
     }
 
+    // Manejar el registro de un nuevo usuario
     public function register(Request $request)
     {
-        // Verificar si el usuario autenticado tiene rol de 'admin'
-        if (Auth::user()->role !== 'admin') {
-            return redirect()->route('dashboard'); // Redirige al dashboard si no es admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            return redirect()->route('dashboard'); 
         }
 
         // Validación y creación de usuario
@@ -32,28 +32,24 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|in:admin,user',
         ]);
 
-        $user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user', // Aquí puedes definir si deseas asignar un rol por defecto
+            'role' => $request->role,
         ]);
 
-        // Iniciar sesión automáticamente
-        Auth::login($user);
-
-        // Redirigir al dashboard
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with('success', 'Usuario registrado correctamente.');
     }
-
 
     // Mostrar el formulario de login
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect()->route('dashboard'); // Evita que un usuario autenticado vea la página de login
+            return redirect()->route('dashboard'); 
         }
         return view('auth.login');
     }
@@ -61,14 +57,17 @@ class AuthController extends Controller
     // Manejar el login
     public function login(Request $request)
     {
-        // Validar las credenciales
+        
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
+        // Verificar si el usuario quiere ser recordado
+        $remember = $request->has('remember');
+
         // Intentar autenticar al usuario
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember)) {
             return redirect()->route('dashboard');
         }
 
@@ -112,8 +111,13 @@ class AuthController extends Controller
             }
         );
 
-        return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('success', 'Contraseña restablecida correctamente.')
-            : back()->withErrors(['email' => 'No se pudo restablecer la contraseña.']);
+        // Verificar el estado del restablecimiento de contraseña
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('success', 'Contraseña restablecida correctamente.');
+        } elseif ($status === Password::INVALID_TOKEN) {
+            return back()->withErrors(['token' => 'El enlace de restablecimiento ha expirado o es inválido.']);
+        } else {
+            return back()->withErrors(['email' => 'No se pudo restablecer la contraseña.']);
+        }
     }
 }

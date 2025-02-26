@@ -30,13 +30,18 @@
                         <td>{{ $venta->fecha_venta }}</td>              
                         <td>{{ number_format($venta->total, 2) }}</td> 
                         <td>
+                        <div class="btn-group gap-2" role="group">
+                        <a href="{{ route('ventas.show', $venta->id) }}" class="btn btn-info rounded-pill me-2" title="Ver detalles">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
                             <form action="{{ route('ventas.destroy', $venta->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta venta?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
+                                <button type="submit" class="btn btn-danger rounded-pill me-2">
                                     <i class="fas fa-trash-alt"></i> Eliminar
                                 </button>
                             </form>
+                        </div>
                         </td>
                     </tr>
                 @endforeach

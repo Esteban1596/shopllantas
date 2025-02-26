@@ -15,15 +15,17 @@ class VentaRealizada extends Model
 
     public function cotizacion()
     {
-        return $this->belongsTo(Cotizacion::class); // Una venta realizada está asociada a una cotización
+        return $this->belongsTo(Cotizacion::class);
     }
 
     public function producto()
     {
-        return $this->belongsTo(Producto::class); // Una venta realizada tiene un producto
-    }
+        return $this->belongsTo(Producto::class);
+    }    
+
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
     }
+   
 }

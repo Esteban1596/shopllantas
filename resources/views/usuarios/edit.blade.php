@@ -37,17 +37,42 @@
             </select>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 position-relative">
             <label for="password" class="form-label">Contraseña (dejar en blanco si no deseas cambiarla)</label>
-            <input type="password" class="form-control" name="password" placeholder="Nueva contraseña">
+            <div class="input-group">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Nueva contraseña">
+                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password', 'togglePasswordIcon')">
+                    <i id="togglePasswordIcon" class="fas fa-eye"></i>
+                </button>
+            </div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 position-relative">
             <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
-            <input type="password" class="form-control" name="password_confirmation" placeholder="Confirmar nueva contraseña">
+            <div class="input-group">
+                <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Confirmar nueva contraseña">
+                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password_confirmation', 'toggleConfirmPasswordIcon')">
+                    <i id="toggleConfirmPasswordIcon" class="fas fa-eye"></i>
+                </button>
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Actualizar</button>
     </form>
 </div>
+<script>
+    function togglePassword(fieldId, iconId) {
+        let passwordField = document.getElementById(fieldId);
+        let icon = document.getElementById(iconId);
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+</script>
 @endsection
