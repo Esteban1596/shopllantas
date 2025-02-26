@@ -46,19 +46,29 @@
             <td>{{ $cotizacion->fecha }}</td>
             <td>{{ $cotizacion->total }}</td>
             <td>
-                <div class="btn-group" role="group">
+                <div class="btn-group gap-2" role="group">
                     @if($cotizacion->status != 'vendida')
-                        <a href="{{ route('cotizaciones.show', $cotizacion->id) }}" class="btn btn-info rounded-pill me-2">Ver</a>
+                        <a href="{{ route('cotizaciones.show', $cotizacion->id) }}" class="btn btn-info rounded-pill me-2">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
+
+                        <a href="{{ route('cotizaciones.edit', $cotizacion->id) }}" class="btn btn-warning rounded-pill me-2">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+
                         <button type="button" class="btn btn-outline-success btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#ventaModal{{ $cotizacion->id }}">
                             <i class="fas fa-check-circle"></i> Venta
                         </button>
                     @else
                         <button class="btn btn-secondary" disabled>Venta</button>
                     @endif
+
                     <form action="{{ route('cotizaciones.destroy', $cotizacion->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de eliminar esta cotización?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger rounded-pill">Eliminar</button>
+                        <button type="submit" class="btn btn-danger rounded-pill">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
                     </form>
                 </div>
             </td>

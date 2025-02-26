@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Cotizacion;
 use Illuminate\Http\Request;
 use App\Models\VentaRealizada;
-use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class VentaController extends Controller
 {
@@ -34,6 +35,12 @@ class VentaController extends Controller
 
         return redirect()->route('cotizaciones.index')->with('success', 'Venta registrada y cotización marcada como vendida.');
     }
+    public function show($id)
+    {
+        
+        $venta = VentaRealizada::with(['cotizacion', 'cliente'])->findOrFail($id);
+        return view('ventas.show', compact('venta'));
+    }
 
     public function destroy($id)
     {
@@ -47,7 +54,14 @@ class VentaController extends Controller
 
         return redirect()->back()->with('success', 'Venta y cotización eliminadas correctamente.');
     }
+    public function descargarPDF($id)
+    {
+        $venta = VentaRealizada::findOrFail($id);
 
+        $pdf = Pdf::loadView('ventas.pdf', compact('venta'));
+
+        return $pdf->download('venta_'.$venta->id.'.pdf');
+    }
 
 
 

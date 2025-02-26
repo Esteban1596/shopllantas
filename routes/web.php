@@ -8,6 +8,9 @@ use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\UserController;
+use App\Models\Cotizacion;
+use App\Models\Producto;
+use Illuminate\Http\Request;
 
 // Redirigir a login en lugar de mostrar 'welcome'
 Route::get('/', function () {
@@ -59,11 +62,16 @@ Route::middleware(['auth'])->group(function () {
    
     Route::get('ventas', [VentaController::class, 'index'])->name('ventas.index');
     Route::post('ventas', [VentaController::class, 'store'])->name('ventas.store');
+    Route::get('/ventas/{id}', [VentaController::class, 'show'])->name('ventas.show');
     Route::delete('ventas/{id}', [VentaController::class, 'destroy'])->name('ventas.destroy');
+    Route::get('/ventas/{id}/descargar', [VentaController::class, 'descargarPDF'])->name('ventas.descargar');
+    /*Route::post('ventas', [VentaController::class]);*/
 
-    
     Route::resource('usuarios', UserController::class);
+ 
+    Route::get('/productos/lista', function (Request $request) {
+        return response()->json(Producto::all());
+    })->name('productos.lista');
 
 });
-
 

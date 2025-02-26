@@ -16,7 +16,9 @@
     @endif
 <div class="container">
     <h2 class="mb-4">Lista de Usuarios</h2>
-
+    <a href="{{ route('register') }}" class="btn btn-primary mb-3">
+        <i class="fas fa-user-plus"></i> Ir a Registro de Usuario
+    </a>
     <table class="table table-striped">
         <thead>
             <tr>

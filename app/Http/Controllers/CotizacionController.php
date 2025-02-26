@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use App\Models\Cotizacion;
 use App\Models\CotizacionProducto;
 use Illuminate\Http\Request;
@@ -90,6 +91,78 @@ class CotizacionController extends Controller
 
 
     }  
+    public function edit($id)
+    {
+        $cotizacion = Cotizacion::with('productosRelacionados')->findOrFail($id);
+        $clientes = Cliente::all(); // Obtener lista de clientes
+        return view('cotizaciones.edit', compact('cotizacion', 'clientes'));
+    }
+
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'codigo_pedido' => 'required|string|max:6|unique:cotizaciones,codigo_pedido,' . $id,
+        'cliente_id' => 'required|exists:clientes,id',
+        'productos' => 'required|array',
+        'productos.*.cantidad' => 'required|integer|min:1',
+        'productos.*.precio_unitario' => 'required|numeric|min:0',
+    ]);
+
+    $cotizacion = Cotizacion::findOrFail($id);
+
+    // Obtener los productos originales antes de la actualización
+    $productosAnteriores = $cotizacion->productosRelacionados()->get();
+
+    // Actualizar la cotización con los nuevos datos del cliente y código de pedido
+    $cotizacion->update([
+        'codigo_pedido' => $request->codigo_pedido,
+        'cliente_id' => $request->cliente_id,
+        'updated_at' => now()
+    ]);
+
+    $subtotal = 0;
+    $num_productos = 0;
+    $productosParaSync = [];
+
+    foreach ($request->productos as $productoId => $datos) {
+        $producto = Producto::findOrFail($productoId);
+
+        // Obtener la cantidad anterior
+        $cantidadAnterior = optional($productosAnteriores->where('id', $productoId)->first())->pivot->cantidad ?? 0;
+
+        // Calcular la diferencia para ajustar existencias
+        $diferencia = $datos['cantidad'] - $cantidadAnterior;
+
+        // Actualizar la existencia del producto
+        $producto->update([
+            'existencia' => $producto->existencia - $diferencia
+        ]);
+
+        // Preparar datos para la relación de la tabla intermedia
+        $productosParaSync[$productoId] = [
+            'cantidad' => $datos['cantidad'],
+            'precio_unitario' => $datos['precio_unitario'],
+        ];
+
+        $subtotal += $datos['cantidad'] * $datos['precio_unitario'];
+        $num_productos += $datos['cantidad'];
+    }
+
+    // 🔹 Aquí se usa `syncWithoutDetaching()` para actualizar y agregar productos
+    $cotizacion->productosRelacionados()->syncWithoutDetaching($productosParaSync);
+
+    // Calcular el IVA y el total
+    $iva = $subtotal * 0.16;
+    $total = $subtotal + $iva;
+
+    // Actualizar la cotización con el total
+    $cotizacion->update([
+        'total' => $total,
+        'productos' => $num_productos
+    ]);
+
+    return redirect()->route('cotizaciones.index')->with('success', 'Cotización actualizada correctamente.');
+}
 
     public function destroy($id)
         {
@@ -121,6 +194,13 @@ class CotizacionController extends Controller
                 return $pdf->download('cotizacion_' . $cotizacion->codigo_pedido . '.pdf');
         }
 
+        public function buscarProducto(Request $request)
+{
+    $query = $request->input('query');
+    $productos = Producto::where('nombre', 'like', "%{$query}%")->get();
 
-    
+    return response()->json(['productos' => $productos]);
+}
+
+        
 }

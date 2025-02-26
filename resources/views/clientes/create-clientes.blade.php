@@ -7,7 +7,7 @@
             {{ session('success') }}
         </div>
     @endif
-<div class="container">
+<div class="container mt-2 mb-2 p-2">
     <div class="card shadow-lg p-4">
         <h2 class="mb-4">Agregar Cliente</h2>
 

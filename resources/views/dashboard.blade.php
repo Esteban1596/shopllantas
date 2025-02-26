@@ -15,56 +15,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-
-    <!-- Botones del Dashboard -->
-    <div class="container mt-4 mb-2 p-2 option-table">
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <div class="row">
-                <!-- Botón Dashboard -->
-                <div class="col-3">
-                    <button class="btn btn-dashboard">
-                        Dashboard
-                    </button>
-                </div>
-
-                <!-- Botón Analíticas -->
-                <div class="col-3">
-                    <button class="btn btn-analiticas">
-                        Analíticas
-                    </button>
-                </div>
-
-                <!-- Botón CxC -->
-                <div class="col-3">
-                    <button class="btn btn-cxc">
-                        CxC
-                    </button>
-                </div>
-
-                <!-- Botón CxP -->
-                <div class="col-3">
-                    <button class="btn btn-cxp">
-                        CxP
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container mt-2 mb-2 p-2">
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a href="{{ route('productos.index') }}" class="btn btn-primary">Productos</a>
-            <a href="{{ route('clientes.index') }}" class="btn btn-primary">Clientes</a>
-            <a href="{{ route('cotizaciones.index') }}" class="btn btn-primary">Cotizaciones</a>
-            <a href="{{ route('ventas.index') }}" class="btn btn-primary">Ventas</a>
-     
-            @if(auth()->check() && auth()->user()->isAdmin())  
-            <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Usuarios</a>
-        @endif
-           
-        </div>
-    </div>
-
     <div class="container mt-2 mb-2 p-2">
         <input type="text" id="search" class="form-control" placeholder="Buscar producto por código o nombre...">
     </div>
@@ -187,12 +137,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-            <form action="{{ route('cotizaciones.store') }}" method="POST">
+            <form id="formGuardarCotizacion" action="{{ route('cotizaciones.store') }}" method="POST">
     @csrf
     <div class="form-group">
         <label for="codigo_pedido">Código de Cotización</label>
         <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" maxlength="6" required>
+        <div id="error-codigo" class="text-danger" style="display: none; font-size: 14px; margin-top: 5px;"></div>
     </div>
+
     <div class="form-group">
         <label for="nombre">Nombre de la Cotización</label>
         <input type="text" class="form-control" name="nombre" id="nombre" required>
