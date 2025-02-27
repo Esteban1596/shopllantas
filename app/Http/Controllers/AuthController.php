@@ -42,7 +42,7 @@ class AuthController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Usuario registrado correctamente.');
+        return redirect()->route('usuarios.index')->with('success', 'Usuario registrado correctamente.');
     }
 
     // Mostrar el formulario de login

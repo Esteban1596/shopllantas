@@ -11,8 +11,13 @@
         </div>
     @endif
 
+    <!-- Barra de búsqueda -->
+    <div class="mb-3">
+        <input type="text" id="search" class="form-control" placeholder="Buscar ventas..." aria-label="Buscar venta">
+    </div>
+
     <div class="table-responsive">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Código de Cotización</th>
@@ -22,7 +27,7 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="listaventas">
                 @foreach($ventas as $venta)
                     <tr>
                         <td>{{ $venta->cotizacion->codigo_pedido }}</td> 
@@ -49,4 +54,24 @@
         </table>
     </div>
 </div>
+<script>
+    document.getElementById('search').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#listaventas tr');
+
+        rows.forEach(row => {
+            const cells = row.getElementsByTagName('td');
+            const codigo_pedido = cells[0].textContent.toLowerCase();
+            const nombre = cells[1].textContent.toLowerCase();
+            const fecha_venta = cells[2].textContent.toLowerCase();
+
+            if (codigo_pedido.includes(searchTerm) || nombre.includes(searchTerm) || fecha_venta.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
 @endsection
+  

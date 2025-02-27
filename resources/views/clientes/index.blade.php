@@ -49,13 +49,18 @@
                 <td>{{ $cliente->direccion }}</td>
                 <td>{{ $cliente->website }}</td>
                 <td>
-                <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE') 
-                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este producto?')">
-                                <i class="fas fa-trash"></i> Eliminar
-                    </button>
-                </form>
+                    <div class="btn-group gap-2" role="group">
+                        <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-warning me-2">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE') 
+                            <button type="submit" class="btn btn-danger me-2" onclick="return confirm('¿Estás seguro de eliminar este cliente?')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @endforeach
