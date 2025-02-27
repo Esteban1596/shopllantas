@@ -14,7 +14,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-<div class="container">
+<div class="container mt-2 mb-2 p-2">
     <h2>Editar Usuario</h2>
     <form action="{{ route('usuarios.update', $usuario->id) }}" method="POST">
         @csrf

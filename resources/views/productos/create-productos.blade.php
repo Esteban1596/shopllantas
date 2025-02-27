@@ -2,12 +2,18 @@
 
 @section('content')
 <!-- Mostrar mensajes de éxito -->
-@if (session('success'))
-        <div class="alert alert-success">
+@if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    
+    @if(session('warning'))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ session('warning') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 <div class="container  mt-2 mb-2 p-2">
     <div class="card shadow-lg p-4">
         <h2 class="mb-4">Agregar Producto</h2>
@@ -38,8 +44,6 @@
                 <button type="submit" class="btn btn-success btn">
                     <i class="fas fa-save"></i> Guardar Producto
                 </button>
-            </div>
-            <div class="text-lett mt-3">
                 <a href="{{ route('productos.index') }}" class="btn btn-secondary btn">
                     <i class="fas fa-arrow-left"></i> Regresar
                 </a>

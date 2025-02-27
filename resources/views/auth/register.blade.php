@@ -25,8 +25,8 @@
         <div class="mb-3">
             <label for="role" class="form-label">Rol</label>
             <select class="form-control @error('role') is-invalid @enderror" name="role" required>
+            <option value="user">Usuario</option>
                 <option value="admin">Administrador</option>
-                <option value="user">Usuario</option>
             </select>
             @error('role')
                 <div class="invalid-feedback">{{ $message }}</div>

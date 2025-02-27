@@ -46,15 +46,9 @@ Route::post('logout', function () {
 // Rutas de productos y clientes, protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
-    Route::get('registro-producto', [ProductoController::class, 'create'])->name('productos.create');
-    Route::post('registro-producto', [ProductoController::class, 'store'])->name('productos.store');
-    Route::delete('productos/{producto}', [ProductoController::class, 'destroy'])->name('productos.destroy');
-    
-    Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
-    Route::get('registro-cliente', [ClienteController::class, 'create'])->name('clientes.create');
-    Route::post('registro-cliente', [ClienteController::class, 'store'])->name('clientes.store');
-    Route::delete('clientes/{cliente}', [ClienteController::class, 'destroy'])->name('clientes.destroy');
+    Route::resource('productos', ProductoController::class);
+   
+    Route::resource('clientes', ClienteController::class);
 
 
     Route::resource('cotizaciones', CotizacionController::class);
@@ -65,7 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ventas/{id}', [VentaController::class, 'show'])->name('ventas.show');
     Route::delete('ventas/{id}', [VentaController::class, 'destroy'])->name('ventas.destroy');
     Route::get('/ventas/{id}/descargar', [VentaController::class, 'descargarPDF'])->name('ventas.descargar');
-    /*Route::post('ventas', [VentaController::class]);*/
+    
 
     Route::resource('usuarios', UserController::class);
  

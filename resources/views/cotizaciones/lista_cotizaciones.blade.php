@@ -2,8 +2,6 @@
 
 @section('content')
 <div class="container">
-    <h3>Cotizaciones</h3>
-
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -18,13 +16,14 @@
         </div>
     @endif
 
-    <a href="{{ route('dashboard') }}" class="btn btn-primary mb-3">Crear Cotización</a>
-
+    <a href="{{ route('dashboard') }}" class="btn btn-success mb-3">
+    <i class="fas fa-plus-circle"></i> Crear Cotización</a>
+    <h3>Cotizaciones</h3>
     <!-- Input de búsqueda -->
     <input type="text" id="search" class="form-control mb-3" placeholder="Buscar cotizaciones...">
 
     <div class="table-responsive">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Código</th>

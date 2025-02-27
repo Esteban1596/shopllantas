@@ -32,16 +32,24 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
+            // Verifica si el código ya existe
+        $productoExistente = Producto::where('codigo', $request->codigo)->first();
+
+        if ($productoExistente) {
+            return redirect()->route('productos.create')
+                ->with('warning', 'El código ya está registrado en otro producto.');
+        }
+
         $validated = $request->validate([
             'nombre' => 'required',
             'codigo' => 'required|unique:productos',
             'precio' => 'required|numeric',
             'existencia' => 'required|integer|min:0',
         ]);
-    
+
         Producto::create($validated);
-         
-        return redirect()->route('productos.create')->with('success', 'producto registrado exitosamente');
+
+        return redirect()->route('productos.create')->with('success', 'Producto registrado exitosamente.');
     }
 
     /**
@@ -58,14 +66,37 @@ class ProductoController extends Controller
     public function edit(string $id)
     {
         //
+        $producto = Producto::findOrFail($id);
+        return view('productos.edit', compact('producto'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $producto = Producto::findOrFail($id);
+
+        // Verifica si el código ya está en uso por otro producto
+        $productoExistente = Producto::where('codigo', $request->codigo)
+                                    ->where('id', '!=', $id)
+                                    ->first();
+
+        if ($productoExistente) {
+            return redirect()->route('productos.edit', $id)
+                ->with('warning', 'El código ya está registrado en otro producto.');
+        }
+
+        $validated = $request->validate([
+            'nombre' => 'required',
+            'codigo' => 'required|unique:productos,codigo,' . $id,
+            'precio' => 'required|numeric',
+            'existencia' => 'required|integer|min:0',
+        ]);
+
+        $producto->update($validated);
+
+        return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente.');
     }
 
     /**

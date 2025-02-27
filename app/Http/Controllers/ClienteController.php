@@ -48,25 +48,22 @@ class ClienteController extends Controller
         return view('clientes.edit', compact('cliente'));
     }
 
-    // Actualizar un cliente
     public function update(Request $request, $id)
     {
-        $cliente = Cliente::findOrFail($id);
+    $cliente = Cliente::findOrFail($id);
 
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'telefono' => 'required|string|max:15',
-            'celular' => 'required|string|max:15',
-            'email' => 'required|email|unique:clientes,email,' . $cliente->id,
-            'nombre_comercial' => 'required|string|max:255',
-            'direccion' => 'required|string|max:255',
-            'website' => 'nullable|url',
-        ]);
+    $validated = $request->validate([
+        'nombre' => 'required|string|max:255',
+        'telefono' => 'required|string|max:15',
+        'celular' => 'required|string|max:15',
+        'email' => 'required|email|unique:clientes,email,' . $cliente->id,
+        'nombre_comercial' => 'required|string|max:255',
+        'direccion' => 'required|string|max:255',
+        'website' => 'nullable|url',
+    ]);
 
- 
-        $cliente->update($validated);
-
-        return redirect()->route('clientes.index')->with('success', 'Cliente actualizado exitosamente!');
+    $cliente->update($validated);
+    return redirect()->route('clientes.index')->with('success', 'Cliente actualizado exitosamente!');
     }
 
     public function destroy($id)
