@@ -27,6 +27,7 @@ Route::get('password/reset', [AuthController::class, 'showRequestForm'])->name('
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 // Enviar el correo de recuperación
 Route::post('password/email', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
 
 // Restablecer la contraseña con el token
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
@@ -45,11 +46,19 @@ Route::post('logout', function () {
 
 // Rutas de productos y clientes, protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
-
-    Route::resource('productos', ProductoController::class);
-   
-    Route::resource('clientes', ClienteController::class);
-
+    Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+    Route::get('registro-producto', [ProductoController::class, 'create'])->name('productos.create');
+    Route::post('registro-producto', [ProductoController::class, 'store'])->name('productos.store');
+    Route::delete('productos/{producto}', [ProductoController::class, 'destroy'])->name('productos.destroy');
+    Route::get('productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
+    Route::put('productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
+    
+    Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
+    Route::get('registro-cliente', [ClienteController::class, 'create'])->name('clientes.create');
+    Route::post('registro-cliente', [ClienteController::class, 'store'])->name('clientes.store');
+    Route::delete('clientes/{cliente}', [ClienteController::class, 'destroy'])->name('clientes.destroy');
+    Route::get('clientes/{clientes}/edit', [ProductoController::class, 'edit'])->name('clientes.edit');
+    Route::put('clientes/{cliente}', [ProductoController::class, 'update'])->name('clientes.update');
 
     Route::resource('cotizaciones', CotizacionController::class);
     Route::get('cotizacion/{id}/descargar', [CotizacionController::class, 'descargarCotizacion'])->name('cotizaciones.descargar');
@@ -66,6 +75,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/productos/lista', function (Request $request) {
         return response()->json(Producto::all());
     })->name('productos.lista');
+
+    Route::get('/validar-codigo/{codigo}', [CotizacionController::class, 'validarCodigo']);
 
 });
 

@@ -12,7 +12,7 @@
                 <p><strong>Fecha:</strong> {{ $cotizacion->fecha }}</p>
                 <p><strong>Cliente:</strong> {{ $cotizacion->cliente->nombre }}</p>
                 <p><strong>Nombre Comercial:</strong> {{ $cotizacion->cliente->nombre_comercial }}</p>
-                <h4 class="mt-3">Total de Productos: <span class="badge bg-secondary">{{ $cotizacion->productosRelacionados->count() }}</span></h4>
+                <h4 class="mt-3">Total de Productos Seleccionados: <span class="badge bg-secondary">{{ $cotizacion->productosRelacionados->count()}}</span></h4>
             </div>
 
             <div class="table-responsive">
@@ -29,7 +29,7 @@
                     </thead>
                     <tbody>
                         @php $subtotal = 0; @endphp
-
+                        
                         @foreach ($cotizacion->productosRelacionados as $producto)
                             @php
                                 $productoSubtotal = $producto->pivot->cantidad * $producto->pivot->precio_unitario;
@@ -49,6 +49,11 @@
             </div>
 
             @php
+                $totalProductos = 0;
+                foreach ($cotizacion->productosRelacionados as $producto) {
+                    $totalProductos += $producto->pivot->cantidad;
+                }
+
                 $iva = $subtotal * 0.16;  // IVA del 16%
                 $total = $subtotal + $iva;
             @endphp
@@ -56,6 +61,10 @@
             <div class="row justify-content-end">
                 <div class="col-md-6">
                     <table class="table">
+                        <tr>
+                            <th>Número de productos</th>
+                            <td class="text-end" id="num_productos">{{ $totalProductos }}</td>
+                        </tr>
                         <tr>
                             <th>Subtotal</th>
                             <td class="text-end">${{ number_format($subtotal, 2) }}</td>

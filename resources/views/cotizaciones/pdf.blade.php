@@ -87,11 +87,13 @@
 
     <div class="container">
         
-        <!-- Encabezado 
+        <!-- Encabezado -->
+        <!-- 
         <div class="header">
             <h2>ABACCOR</h2>
             <p>Email: contacto@abaccor.com | Web: https://www.abaccor.com/</p>
-        </div>-->
+        </div> 
+        -->
 
         <!-- Detalle de Cotización -->
         <div class="section">
@@ -99,8 +101,8 @@
             <p><strong>Código de Pedido:</strong> {{ $cotizacion->codigo_pedido }}</p>
             <p><strong>Fecha:</strong> {{ $cotizacion->fecha }}</p>
             <p><strong>Cliente:</strong> {{ $cotizacion->cliente->nombre }}</p>
-            <p><strong>Cliente:</strong> {{ $cotizacion->cliente->nombre_comercial }}</p>
-            <p><strong>Total de Productos:</strong> {{ $cotizacion->productosRelacionados->count() }}</p>
+            <p><strong>Nombre Comercial:</strong> {{ $cotizacion->cliente->nombre_comercial }}</p>
+            <p><strong>Total de Productos Seleccionados:</strong> {{ $cotizacion->productosRelacionados->count() }}</p>
         </div>
         
         <!-- Tabla de productos -->
@@ -136,11 +138,16 @@
 
         <!-- Cálculo del total -->
         @php
+            $totalProductos = $cotizacion->productosRelacionados->sum('pivot.cantidad');
             $iva = $subtotal * 0.16;  // IVA del 16%
             $total = $subtotal + $iva;
         @endphp
 
         <table class="total-table">
+            <tr>
+                <th>Número de productos</th>
+                <td>{{ $totalProductos }}</td>
+            </tr>
             <tr>
                 <th>Subtotal</th>
                 <td>${{ number_format($subtotal, 2) }}</td>

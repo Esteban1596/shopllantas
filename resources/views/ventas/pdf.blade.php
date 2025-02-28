@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -99,8 +99,8 @@
             <p><strong>Código de Pedido:</strong> {{ $venta->cotizacion->codigo_pedido }}</p>
             <p><strong>Fecha:</strong> {{ $venta->cotizacion->fecha }}</p>
             <p><strong>Cliente:</strong> {{ $venta->cotizacion->cliente->nombre }}</p>
-            <p><strong>Cliente:</strong> {{ $venta->cotizacion->cliente->nombre_comercial }}</p>
-            <p><strong>Total de Productos:</strong> {{ $venta->cotizacion->productosRelacionados->count() }}</p>
+            <p><strong>Nombre Comercial:</strong> {{ $venta->cotizacion->cliente->nombre_comercial }}</p>
+            <p><strong>Total de Productos Seleccionados:</strong> {{ $venta->cotizacion->productosRelacionados->count() }}</p>
         </div>
         
         <!-- Tabla de productos -->
@@ -116,11 +116,12 @@
                 </tr>
             </thead>
             <tbody>
-                @php $subtotal = 0; @endphp
+                @php $subtotal = 0; $totalProductos = 0; @endphp
                 @foreach ($venta->cotizacion->productosRelacionados as $producto)
                     @php
                         $productoSubtotal = $producto->pivot->cantidad * $producto->pivot->precio_unitario;
                         $subtotal += $productoSubtotal;
+                        $totalProductos += $producto->pivot->cantidad;
                     @endphp
                     <tr>
                         <td>{{ $producto->id }}</td>
@@ -141,6 +142,10 @@
         @endphp
 
         <table class="total-table">
+            <tr>
+                <th>Número de productos</th>
+                <td>{{ $totalProductos }}</td>
+            </tr>
             <tr>
                 <th>Subtotal</th>
                 <td>${{ number_format($subtotal, 2) }}</td>

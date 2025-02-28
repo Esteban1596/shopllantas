@@ -47,6 +47,7 @@
                                 <th>Cantidad</th>
                                 <th>Precio Unitario</th>
                                 <th>Subtotal</th>
+                                <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody id="productosTable">
@@ -72,6 +73,11 @@
                                     </td>
                                     <td class="subtotal">
                                         ${{ number_format($producto->pivot->cantidad * $producto->pivot->precio_unitario, 2) }}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto('{{ $producto->id }}')">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -118,91 +124,58 @@
     </div>
 </div>
 
+@push('scripts')
+<script src="{{ asset('js/cotizaciones/edit.js') }}"></script>
+@endpush
 <script>
-    // Función para recalcular el subtotal, IVA y total
-    function calcularTotales() {
-        let subtotal = 0;
-        let num_productos = 0;
-        const productos = document.querySelectorAll('#productosTable tr');
-
-        productos.forEach(producto => {
-            // Obtener los valores de cantidad y precio unitario
-            const cantidad = parseFloat(producto.querySelector('.cantidad').value) || 0;
-            const precioUnitario = parseFloat(producto.querySelector('.precio_unitario').value) || 0;
-            const subtotalProducto = cantidad * precioUnitario;
-
-            num_productos += cantidad;
-
-            // Actualizar el subtotal de cada producto
-            producto.querySelector('.subtotal').textContent = `$${subtotalProducto.toFixed(2)}`;
-            subtotal += subtotalProducto;
-        });
-
-        // Calcular el IVA y el total
-        const iva = subtotal * 0.16;  // IVA del 16%
-        const total = subtotal + iva;
-        
-        // Actualizar los valores en la interfaz
-        document.getElementById('num_productos').textContent = num_productos;
-        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-        document.getElementById('iva').textContent = `$${iva.toFixed(2)}`;
-        document.getElementById('total').innerHTML = `<strong>$${total.toFixed(2)}</strong>`;
-    }
-
-    // Ejecutar la función al cargar la página
-    document.addEventListener('DOMContentLoaded', function() {
-        calcularTotales();
-    });
-    //////////////////////////////////////////
     document.addEventListener("DOMContentLoaded", function () {
-    let productosDisponibles = [];
+let productosDisponibles = [];
 
-    // Cargar productos desde la base de datos cuando se escribe en el buscador
-    document.getElementById("buscar_producto").addEventListener("keyup", function () {
-        const filtro = this.value.trim().toLowerCase();
-        
-        if (filtro.length === 0) {
-            document.getElementById("productos_busqueda").innerHTML = "";
-            return;
-        }
-
-        fetch("{{ route('productos.lista') }}")
-            .then(response => response.json())
-            .then(data => {
-                productosDisponibles = data.filter(p => p.nombre.toLowerCase().includes(filtro));
-                mostrarProductos(productosDisponibles);
-            });
-    });
-
-    function mostrarProductos(productos) {
-        const contenedor = document.getElementById("productos_busqueda");
-        contenedor.innerHTML = "";
-
-        if (productos.length === 0) {
-            contenedor.innerHTML = `<p class="text-muted">No se encontraron productos.</p>`;
-            return;
-        }
-
-        productos.forEach(producto => {
-            const productoHTML = `
-                <div class="card p-2 mb-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>${producto.nombre}</strong> <br>
-                            Precio: $${producto.precio}
-                        </div>
-                        <button type="button" class="btn btn-success btn-sm" onclick="agregarProducto(${producto.id}, '${producto.nombre}', ${producto.precio})">
-                            Agregar
-                        </button>
-                    </div>
-                </div>
-            `;
-            contenedor.innerHTML += productoHTML;
-        });
+// Cargar productos desde la base de datos cuando se escribe en el buscador
+document.getElementById("buscar_producto").addEventListener("keyup", function () {
+    const filtro = this.value.trim().toLowerCase();
+    
+    if (filtro.length === 0) {
+        document.getElementById("productos_busqueda").innerHTML = "";
+        return;
     }
+
+    fetch("{{ route('productos.lista') }}")
+        .then(response => response.json())
+        .then(data => {
+            productosDisponibles = data.filter(p => p.nombre.toLowerCase().includes(filtro));
+            mostrarProductos(productosDisponibles);
+        });
 });
 
-// Función para agregar un producto a la tabla de cotización sin enviar el formulario
+function mostrarProductos(productos) {
+    const contenedor = document.getElementById("productos_busqueda");
+    contenedor.innerHTML = "";
+
+    if (productos.length === 0) {
+        contenedor.innerHTML = `<p class="text-muted">No se encontraron productos.</p>`;
+        return;
+    }
+
+    productos.forEach(producto => {
+        const productoHTML = `
+            <div class="card p-2 mb-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${producto.nombre}</strong> <br>
+                        Precio: $${producto.precio}
+                    </div>
+                    <button type="button" class="btn btn-success btn-sm" onclick="agregarProducto(${producto.id}, '${producto.nombre}', ${producto.precio})">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        `;
+        contenedor.innerHTML += productoHTML;
+    });
+}
+});
+
 function agregarProducto(id, nombre, precio) {
     const tabla = document.getElementById("productosTable");
 
@@ -223,10 +196,33 @@ function agregarProducto(id, nombre, precio) {
             <input type="number" name="productos[${id}][precio_unitario]" value="${precio}" class="form-control precio_unitario" readonly>
         </td>
         <td class="subtotal">$${precio.toFixed(2)}</td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto('{{ $producto->id }}')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>              
+        </td>
     `;
 
     tabla.appendChild(nuevaFila);
+
+    // Actualizar número de productos
+    const numProductos = document.querySelectorAll('#productosTable tr').length;
+    document.getElementById('num_productos').textContent = numProductos;
+
+    // Calcular totales
     calcularTotales();
 }
+function eliminarProducto(id) {
+    const fila = document.querySelector(`[data-producto-id="${id}"]`);
+    if (fila) {
+        fila.style.transition = "opacity 0.3s";
+        fila.style.opacity = "0";
+        setTimeout(() => {
+            fila.remove();
+            calcularTotales();
+        }, 300);
+    }
+}
+
 </script>
 @endsection
