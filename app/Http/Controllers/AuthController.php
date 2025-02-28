@@ -20,6 +20,11 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
+    public function showLinkRequestForm()
+    {
+        return view('auth.passwords.email');
+    }
+
     // Manejar el registro de un nuevo usuario
     public function register(Request $request)
     {

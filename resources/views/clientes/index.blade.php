@@ -21,7 +21,7 @@
     <h3 class="mb-4">Lista de Clientes</h3>
     <!-- Barra de búsqueda -->
     <div class="mb-3">
-        <input type="text" id="search" class="form-control" placeholder="Buscar productos..." aria-label="Buscar productos">
+        <input type="text" id="search" class="form-control" placeholder="Buscar clientes..." aria-label="Buscar clientes">
     </div>
     <!-- Tabla -->
     <div class="table-responsive">
