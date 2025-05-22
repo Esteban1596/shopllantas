@@ -12,8 +12,8 @@ class DashboardController extends Controller
     //
     public function index()
     {
-        $productos = Producto::all();  // Cargar productos
-        $clientes = Cliente::all();    // Cargar clientes
+        $productos = Producto::all(); 
+        $clientes = Cliente::all();    
         return view('dashboard', compact('productos', 'clientes'));
     }
 
@@ -34,7 +34,6 @@ class DashboardController extends Controller
         $cotizacion->nombre_cotizacion = $validated['nombre_cotizacion'];
         $cotizacion->save();
 
-        // Asociar productos a la cotización (si es necesario)
         foreach ($validated['productos'] as $producto) {
             // Logica para asociar productos a la cotización
         }

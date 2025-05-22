@@ -151,7 +151,6 @@
             const fecha = cells[4].textContent.toLowerCase();
             const total = cells[5].textContent.toLowerCase();
 
-            // Verifica si alguno de los campos contiene el término de búsqueda
             if (codigo.includes(searchTerm) || nombre.includes(searchTerm) || cliente.includes(searchTerm) || productos.includes(searchTerm) || fecha.includes(searchTerm) || total.includes(searchTerm)) {
                 row.style.display = '';
             } else {
@@ -163,12 +162,11 @@
     function deleteCotizacionRow(cotizacionId) {
         // Realiza el envío del formulario
         var form = document.getElementById('venta-form-' + cotizacionId);
-        form.submit();  // Enviar el formulario para registrar la venta.
+        form.submit();
 
-        // Elimina la fila de la cotización de la tabla (visualmente)
         var row = document.getElementById('cotizacion-' + cotizacionId);
         if (row) {
-            row.remove();  // Eliminar la fila de la tabla
+            row.remove(); 
         }
     }
 </script>

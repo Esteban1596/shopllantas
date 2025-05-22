@@ -53,22 +53,21 @@ class CotizacionController extends Controller
 
         // Insertar los productos seleccionados en la tabla cotizacion_producto y actualizar la existencia
         foreach ($productosSeleccionados as $producto) {
-            $productoDb = Producto::find($producto['id']); // Encontrar el producto en la base de datos
+            $productoDb = Producto::find($producto['id']); 
 
             if ($productoDb && $productoDb->existencia >= $producto['cantidad']) {
-                // Restar la cantidad del producto al momento de guardar la cotización
                 $productoDb->existencia -= $producto['cantidad'];
                 $productoDb->save();
 
                 // Insertar el producto en la tabla cotizacion_producto
                 CotizacionProducto::create([
-                    'cotizacion_id' => $cotizacion->id, // ID de la cotización recién creada
+                    'cotizacion_id' => $cotizacion->id, 
                     'producto_id' => $producto['id'],
                     'cantidad' => $producto['cantidad'],
                     'precio_unitario' => $producto['precio']
                 ]);
             } else {
-                // Si no hay suficiente existencia, puedes retornar un error o manejarlo de otra manera
+                
                 return redirect()->back()->with('error', 'No hay suficiente existencia del producto: ' . $productoDb->nombre);
             }
         }
@@ -92,7 +91,7 @@ class CotizacionController extends Controller
     public function edit($id)
     {
         $cotizacion = Cotizacion::with('productosRelacionados')->findOrFail($id);
-        $clientes = Cliente::all(); // Obtener lista de clientes
+        $clientes = Cliente::all(); 
         return view('cotizaciones.edit', compact('cotizacion', 'clientes'));
     }
 
@@ -120,8 +119,7 @@ class CotizacionController extends Controller
         // Restaurar existencias de los productos eliminados y eliminarlos de la tabla intermedia
         foreach ($productosEliminados as $productoEliminado) {
             $cantidadAnterior = $productoEliminado->pivot->cantidad;
-            
-            // Restaurar la existencia del producto
+
             $productoEliminado->update([
                 'existencia' => $productoEliminado->existencia + $cantidadAnterior
             ]);

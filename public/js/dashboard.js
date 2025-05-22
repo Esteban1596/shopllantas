@@ -4,13 +4,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const productosTable = document.querySelectorAll("#productos-table tbody tr");
     const productosSeleccionados = document.querySelector("#productos-seleccionados tbody");
 
-    // Elementos de la tabla cotizador
-    const numProductosElement = document.getElementById("num-productos");
-    const subtotalElement = document.getElementById("subtotal-cotizador");
-    const ivaElement = document.getElementById("iva");
-    const totalElement = document.getElementById("total");
+    
+    //const numProductosElement = document.getElementById("num-productos");
+    //const subtotalElement = document.getElementById("subtotal-cotizador");
+    //const ivaElement = document.getElementById("iva");
+    //const totalElement = document.getElementById("total");
 
-    // Objeto para almacenar la existencia inicial de cada producto
+    // para almacenar la existencia inicial de cada producto
     let existenciaInicial = {};
 
     // Función para filtrar productos en tiempo real
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let precio = parseFloat(row.querySelector(".precio").textContent);
             let cantidad = parseInt(cantidadElement.textContent);
             let existenciaActual = parseInt(existenciaElement.textContent);
-            let existenciaMax = existenciaInicial[productId]; // Existencia original
+           // let existenciaMax = existenciaInicial[productId]; // Existencia original
             let action = e.target.getAttribute("data-action");
 
             if (action === "increase" && existenciaActual > 0) {

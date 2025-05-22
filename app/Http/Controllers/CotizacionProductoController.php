@@ -13,10 +13,10 @@ class CotizacionProductoController extends Controller
 
     foreach ($productos as $producto) {
         CotizacionProducto::create([
-            'cotizacion_id' => $request->cotizacion_id, // ID de la cotización
-            'producto_id' => $producto->id, // ID del producto
-            'cantidad' => $producto->cantidad, // Cantidad
-            'precio_unitario' => $producto->precio, // Precio unitario
+            'cotizacion_id' => $request->cotizacion_id, 
+            'producto_id' => $producto->id, 
+            'cantidad' => $producto->cantidad, 
+            'precio_unitario' => $producto->precio, 
         ]);
     }
 

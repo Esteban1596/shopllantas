@@ -11,7 +11,6 @@
     <div class="card shadow-lg p-4">
         <h2 class="mb-4">Agregar Cliente</h2>
 
-    <!-- Formulario de registro de cliente -->
     <form action="{{ route('clientes.store') }}" method="POST">
         @csrf
 

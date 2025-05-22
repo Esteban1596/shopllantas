@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Bootstrap CSS -->
+  
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
@@ -15,10 +15,10 @@
 </head>
 
 <body>
-    <!-- Barra de navegación -->
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <!-- Logo -->
+
             <a class="navbar-brand" href="#">
                 <img src="{{ asset('img/logo-abaccor.png') }}" alt="Logo" style="height: 40px;">
             </a>
@@ -51,7 +51,6 @@
                     </li>
                 </ul>
 
-                <!-- Elementos de la derecha -->
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item me-2">
                         <button class="btn" style="background-color: #28a745; color: white;" >
@@ -89,33 +88,29 @@
             </div>
         </div>
     </nav>
-     
-    <!-- Botones del Dashboard -->
+
     <div class="container mt-4 mb-2 p-2 option-table">
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <div class="row">
-                <!-- Botón Dashboard -->
+        
                 <div class="col-3">
                     <button class="btn btn-dashboard">
                         Dashboard
                     </button>
                 </div>
 
-                <!-- Botón Analíticas -->
                 <div class="col-3">
                     <button class="btn btn-analiticas">
                         Analíticas
                     </button>
                 </div>
 
-                <!-- Botón CxC -->
                 <div class="col-3">
                     <button class="btn btn-cxc">
                         CxC
                     </button>
                 </div>
 
-                <!-- Botón CxP -->
                 <div class="col-3">
                     <button class="btn btn-cxp">
                         CxP
@@ -139,12 +134,10 @@
         </div>
     </div>
     
-    <!-- Contenido principal -->
     <div class="container">
         @yield('content')
     </div>
 
-    <!-- Scripts de página -->
     @stack('scripts')
 
 </body>

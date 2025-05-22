@@ -12,7 +12,7 @@ use App\Models\Cotizacion;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 
-// Redirigir a login en lugar de mostrar 'welcome'
+
 Route::get('/', function () {
     return redirect()->route('login'); // Redirige a la ruta de login
 });

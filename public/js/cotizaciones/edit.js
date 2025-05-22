@@ -5,7 +5,7 @@
     const productos = document.querySelectorAll('#productosTable tr');
 
     productos.forEach(producto => {
-        // Obtener los valores de cantidad y precio unitario
+        // Esto es para Obtener los valores de cantidad y precio unitario
         const cantidad = parseFloat(producto.querySelector('.cantidad').value) || 0;
         const precioUnitario = parseFloat(producto.querySelector('.precio_unitario').value) || 0;
         const subtotalProducto = cantidad * precioUnitario;
@@ -18,7 +18,7 @@
     });
 
     // Calcular el IVA y el total
-    const iva = subtotal * 0.16;  // IVA del 16%
+    const iva = subtotal * 0.16;
     const total = subtotal + iva;
     
     // Actualizar los valores en la interfaz

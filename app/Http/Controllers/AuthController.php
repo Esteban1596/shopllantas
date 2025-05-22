@@ -102,7 +102,7 @@ class AuthController extends Controller
     public function resetPassword(Request $request)
     {
         $request->validate([
-            'token' => 'required',  // Laravel necesita esto
+            'token' => 'required', 
             'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
         ]);

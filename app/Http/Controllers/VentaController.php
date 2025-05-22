@@ -47,7 +47,7 @@ class VentaController extends Controller
         $venta = VentaRealizada::findOrFail($id);
 
         if ($venta->cotizacion) {
-            $venta->cotizacion->delete(); // Eliminar la cotización asociada
+            $venta->cotizacion->delete(); 
         }
 
         $venta->delete(); // Eliminar la venta

@@ -160,7 +160,6 @@
             </tr>
         </table>
 
-        <!-- Pie de página -->
         <div class="footer">
             <p>Gracias por su preferencia. Si tiene preguntas, contáctenos.</p>
         </div>

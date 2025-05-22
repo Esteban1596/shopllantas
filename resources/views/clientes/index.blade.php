@@ -23,7 +23,7 @@
     <div class="mb-3">
         <input type="text" id="search" class="form-control" placeholder="Buscar clientes..." aria-label="Buscar clientes">
     </div>
-    <!-- Tabla -->
+
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
@@ -83,7 +83,6 @@
                 const direccion = cells[5].textContent.toLowerCase();
                 const website = cells[6].textContent.toLowerCase();
 
-                // Verifica si alguno de los campos contiene el término de búsqueda
                 if (nombre.includes(searchTerm) || telefono.includes(searchTerm) || celular.includes(searchTerm) || email.includes(searchTerm) || nombre_comercial.includes(searchTerm) || direccion.includes(searchTerm) || website.includes(searchTerm
                 )) {
                     row.style.display = '';
